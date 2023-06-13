@@ -3,8 +3,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import IconHoverEffect from "./IconHoverEffect";
 import Link from "next/link";
 import ProfileImage from "./ProfileImage";
+import LoadingSpinner from "./LoadingSpinner";
 import { useSession } from "next-auth/react";
 import { VscHeart, VscHeartFilled } from "react-icons/vsc";
+import { api } from "~/utils/api";
 
 type Post = {
   id: string;
@@ -28,9 +30,9 @@ const InfinitePostList = ({
   isError,
   isLoading,
   fetchNewPosts,
-  hasMore,
+  hasMore = false,
 }: InfinitePostListProps) => {
-  if (isLoading) return <h1>Loading ... </h1>;
+  if (isLoading) return <LoadingSpinner />;
   if (isError) return <h1>Error... </h1>;
 
   if (posts == null || posts.length === 0) {
@@ -47,7 +49,7 @@ const InfinitePostList = ({
         dataLength={posts.length}
         next={fetchNewPosts}
         hasMore={hasMore}
-        loader={"Loading... "}
+        loader={<LoadingSpinner />}
       >
         {posts.map((post) => {
           return <PostCard key={post.id} {...post} />;
@@ -69,6 +71,51 @@ const PostCard = ({
   likeCount,
   likedByMe,
 }: Post) => {
+  const trpcUtils = api.useContext();
+  const toggleLike = api.post.toggleLike.useMutation({
+    onSuccess: ({ addedLike }) => {
+      const updateData: Parameters<
+        typeof trpcUtils.post.infiniteFeed.setInfiniteData
+      >[1] = (oldData) => {
+        if (oldData == null) return;
+
+        const countModifier = addedLike ? 1 : -1;
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page) => {
+            return {
+              ...page,
+              posts: page.posts.map((post) => {
+                if (post.id === id) {
+                  return {
+                    ...post,
+                    likeCount: post.likeCount + countModifier,
+                    likeByMe: addedLike,
+                  };
+                }
+                return post;
+              }),
+            };
+          }),
+        };
+      };
+
+      trpcUtils.post.infiniteFeed.setInfiniteData({}, updateData);
+      trpcUtils.post.infiniteFeed.setInfiniteData(
+        { onlyFollowing: true },
+        updateData
+      );
+      trpcUtils.post.infiniteProfileFeed.setInfiniteData(
+        { userId: user.id },
+        updateData
+      );
+    },
+  });
+
+  const handleToggleLike = () => {
+    toggleLike.mutate({ id });
+  };
+
   return (
     <li className="flex gap-4 border-b px-4 py-4">
       <Link href={`/profiles/${user.id}`}>
@@ -88,18 +135,30 @@ const PostCard = ({
           </span>
         </div>
         <p className="whitespace-pre-wrap">{content}</p>
-        <HeartButton likedByMe={likedByMe} likeCount={likeCount} />
+        <HeartButton
+          onClick={handleToggleLike}
+          isLoading={toggleLike.isLoading}
+          likedByMe={likedByMe}
+          likeCount={likeCount}
+        />
       </div>
     </li>
   );
 };
 
 type HeartButtonProps = {
+  isClick: () => void;
+  isLoading: boolean;
   likedByMe: boolean;
   likeCount: number;
 };
 
-const HeartButton = ({ likedByMe, likeCount }: HeartButtonProps) => {
+const HeartButton = ({
+  isLoading,
+  onClick,
+  likedByMe,
+  likeCount,
+}: HeartButtonProps) => {
   const session = useSession();
   const HeartIcon = likedByMe ? VscHeartFilled : VscHeart;
 
@@ -113,6 +172,8 @@ const HeartButton = ({ likedByMe, likeCount }: HeartButtonProps) => {
   }
   return (
     <button
+      disabled={isLoading}
+      onClick={onClick}
       className={`group -ml-2 flex items-center gap-1 self-start transition-colors duration-200 ${
         likedByMe
           ? "text-red-500"

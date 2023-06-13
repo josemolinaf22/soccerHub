@@ -25,6 +25,7 @@ function Form() {
     updateTextAreaSize(textArea);
     textAreaRef.current = textArea;
   }, []);
+  const trpcUtils = api.useContext();
 
   useLayoutEffect(() => {
     updateTextAreaSize(textAreaRef.current);
@@ -33,6 +34,34 @@ function Form() {
   const createPost = api.post.create.useMutation({
     onSuccess: (newPost) => {
       setInputValue("");
+
+      if (session.status !== "authenticated") return;
+
+      trpcUtils.post.infiniteFeed.setInfiniteData({}, (oldData) => {
+        if (oldData == null || oldData.pages[0] == null) return;
+
+        const newCachePost = {
+          ...newPost,
+          likeCount: 0,
+          likedByMe: false,
+          user: {
+            id: session.data.user.id,
+            name: session.data.user.name || null,
+            image: session.data.user.image || null,
+          },
+        };
+        return {
+          ...oldData,
+          page: [
+            {
+              ...oldData.pages[0],
+              posts: [newCachePost, ...oldData.pages[0].posts],
+            },
+
+            ...oldData.pages.slice(1),
+          ],
+        };
+      });
     },
   });
 
