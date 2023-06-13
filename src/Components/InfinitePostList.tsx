@@ -85,7 +85,7 @@ const PostCard = ({
           pages: oldData.pages.map((page) => {
             return {
               ...page,
-              posts: page.posts.map((post) => {
+              posts: page.posts.map((post: unknown) => {
                 if (post.id === id) {
                   return {
                     ...post,
