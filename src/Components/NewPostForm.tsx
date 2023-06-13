@@ -1,4 +1,10 @@
-import { useState, useLayoutEffect, useRef, useCallback } from "react";
+import {
+  type FormEvent,
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { useSession } from "next-auth/react";
 import ProfileImage from "./ProfileImage";
@@ -67,7 +73,7 @@ function Form() {
 
   if (session.status !== "authenticated") return null;
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     createPost.mutate({ content: inputValue });
