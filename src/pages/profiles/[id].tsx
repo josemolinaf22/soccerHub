@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetStaticPaths, NextPage } from "next";
 import Head from "next/head";
 import { ssgHelper } from "~/server/api/ssgHelper";
 import type { GetStaticPropsContext, InferGetStaticPropsType } from "next";
@@ -24,7 +24,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   const trpcUtils = api.useContext();
   const toggleFollow = api.profile.toggleFollow.useMutation({
     onSuccess: ({ addedFollow }) => {
-      trpcUtils.Utils.profile.getById.setData({ id }, (oldData) => {
+      trpcUtils.profile.getById.setData({ id }, (oldData) => {
         if (oldData == null) return;
 
         const countModifier = addedFollow ? 1 : -1;
@@ -96,7 +96,7 @@ function FollowButton({
 }) {
   const session = useSession();
 
-  if (session.status !== "authentiacted" || session.data.user.id === userId)
+  if (session.status !== "authenticated" || session.data.user.id === userId)
     return null;
   return (
     <Button disabled={isLoading} onClick={onClick} small gray={isFollowing}>
