@@ -85,16 +85,22 @@ const PostCard = ({
           pages: oldData.pages.map((page) => {
             return {
               ...page,
-              posts: page.posts.map((post: unknown) => {
-                if (post.id === id) {
-                  return {
-                    ...post,
-                    likeCount: post.likeCount + countModifier,
-                    likeByMe: addedLike,
-                  };
+              posts: page.posts.map(
+                (post: {
+                  id: string;
+                  likeCount: number;
+                  likeByMe?: boolean;
+                }) => {
+                  if (post.id === id) {
+                    return {
+                      ...post,
+                      likeCount: post.likeCount + countModifier,
+                      likeByMe: addedLike,
+                    };
+                  }
+                  return post;
                 }
-                return post;
-              }),
+              ),
             };
           }),
         };
