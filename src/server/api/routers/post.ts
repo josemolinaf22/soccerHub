@@ -5,7 +5,9 @@ import {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
+  type createTRPCContext,
 } from "~/server/api/trpc";
+import type { inferAsyncReturnType } from "@trpc/server";
 
 export const postRouter = createTRPCRouter({
   infiniteProfileFeed: publicProcedure
@@ -17,7 +19,6 @@ export const postRouter = createTRPCRouter({
       })
     )
     .query(async ({ input: { limit = 10, userId, cursor }, ctx }) => {
-      const currentUserId = ctx.session?.user.id;
 
       return await getInfinitePosts({
         limit,
