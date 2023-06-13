@@ -153,7 +153,7 @@ const PostCard = ({
 };
 
 type HeartButtonProps = {
-  isClick: () => void;
+  onClick: () => void;
   isLoading: boolean;
   likedByMe: boolean;
   likeCount: number;
