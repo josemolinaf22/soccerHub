@@ -10,11 +10,11 @@ import { api } from "~/utils/api";
 
 type Post = {
   id: string;
-  content: string;
-  createdAt: Date;
+  content?: string;
+  createdAt?: Date;
   likeCount: number;
-  likedByMe: boolean;
-  user: { id: string; image: string | null; name: string | null };
+  likedByMe?: boolean;
+  user?: { id: string; image: string | null; name: string | null };
 };
 
 type InfinitePostListProps = {
