@@ -10,11 +10,11 @@ import { api } from "~/utils/api";
 
 type Post = {
   id: string;
-  content?: string;
-  createdAt?: Date;
+  content: string;
+  createdAt: Date;
   likeCount: number;
-  likedByMe?: boolean;
-  user?: { id: string; image: string | null; name: string | null };
+  likedByMe: boolean;
+  user: { id: string; image: string | null; name: string | null };
 };
 
 type InfinitePostListProps = {
@@ -80,27 +80,22 @@ const PostCard = ({
         if (oldData == null) return;
 
         const countModifier = addedLike ? 1 : -1;
+
         return {
           ...oldData,
           pages: oldData.pages.map((page) => {
             return {
               ...page,
-              posts: page.posts.map(
-                (post: {
-                  id: string;
-                  likeCount: number;
-                  likeByMe?: boolean;
-                }) => {
-                  if (post.id === id) {
-                    return {
-                      ...post,
-                      likeCount: post.likeCount + countModifier,
-                      likeByMe: addedLike,
-                    };
-                  }
-                  return post;
+              posts: page.posts.map((post) => {
+                if (post.id === id) {
+                  return {
+                    ...post,
+                    likeCount: post.likeCount + countModifier,
+                    likeByMe: addedLike,
+                  };
                 }
-              ),
+                return post;
+              }),
             };
           }),
         };
@@ -155,7 +150,7 @@ const PostCard = ({
 type HeartButtonProps = {
   onClick: () => void;
   isLoading: boolean;
-  likedByMe: boolean;
+  likedByMe?: boolean;
   likeCount: number;
 };
 
