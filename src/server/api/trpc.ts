@@ -66,7 +66,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 
   return createInnerTRPCContext({
     session,
-    revaildateSSG: res.revalidate,
+    revalidateSSG: res.revalidate,
   });
 };
 
