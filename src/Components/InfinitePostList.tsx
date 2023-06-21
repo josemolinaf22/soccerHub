@@ -118,7 +118,7 @@ const PostCard = ({
   };
 
   return (
-    <li className="flex gap-4 border-b px-4 py-4">
+    <li className="rouded-lg flex gap-4 bg-gray-500 bg-opacity-25 px-4 py-4">
       <Link href={`/profiles/${user.id}`}>
         <ProfileImage src={user.image} />
       </Link>

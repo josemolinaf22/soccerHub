@@ -13,21 +13,23 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <SessionProvider session={session}>
-      <Head>
-        <title>Soccer Hub</title>
-        <meta
-          name="descritpion"
-          content="Website to help you find who is playing in your area!"
-        />
-      </Head>
-      <div className="container mx-auto flex items-start sm:pr-4">
-        <SideNav />
-        <div className="min-h-screen flex-grow border-x">
-          <Component {...pageProps} />
+    <div className="bg-gray-900">
+      <SessionProvider session={session}>
+        <Head>
+          <title>Soccer Hub</title>
+          <meta
+            name="descritpion"
+            content="Website to help you find who is playing in your area!"
+          />
+        </Head>
+        <div className="container mx-auto flex items-start font-sans text-xl text-white sm:pr-4">
+          <SideNav />
+          <div className="min-h-screen flex-grow ">
+            <Component {...pageProps} />
+          </div>
         </div>
-      </div>
-    </SessionProvider>
+      </SessionProvider>
+    </div>
   );
 };
 

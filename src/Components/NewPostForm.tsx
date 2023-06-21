@@ -83,7 +83,7 @@ function Form() {
     <form
       onSubmit={handleSubmit}
       action=""
-      className="flex flex-col gap-2 border-b px-4 py-2"
+      className="my-5 flex flex-col gap-2 px-4 py-2"
     >
       <div className="flex gap-4">
         <ProfileImage src={session.data.user.image} />
