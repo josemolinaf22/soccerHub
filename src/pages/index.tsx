@@ -15,7 +15,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <header className="bg-red sticky top-0 z-10  pt-2">
+      <header className="bg-red sticky top-0 z-10 bg-gray-900 pt-2">
         <h1 className="backdrop-blur=xl mb-2 px-4 text-center text-8xl	font-bold ">
           The Soccer Hub
         </h1>
@@ -25,7 +25,7 @@ const Home: NextPage = () => {
               return (
                 <button
                   key={tab}
-                  className={`hover: flex-grow p-2 hover:bg-gray-200 focus-visible:bg-gray-200 ${
+                  className={`hover: flex-grow p-2 hover:bg-gray-200 hover:text-black focus-visible:bg-gray-200 ${
                     tab === selectedTab
                       ? "border-b-4 border-b-green-500 font-bold"
                       : ""
