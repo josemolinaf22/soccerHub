@@ -17,7 +17,7 @@ const Home: NextPage = () => {
     <>
       <header className="bg-red sticky top-0 z-10 bg-gray-900 pt-2">
         <h1 className="backdrop-blur=xl mb-2 px-4 text-center text-8xl	font-bold ">
-          The Soccer Hub
+          The SoccerHub
         </h1>
         {session.status === "authenticated" && (
           <div className="flex">

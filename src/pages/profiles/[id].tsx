@@ -1,7 +1,11 @@
-import type { GetStaticPaths, NextPage } from "next";
+import type {
+  GetStaticPaths,
+  NextPage,
+  GetStaticPropsContext,
+  InferGetStaticPropsType,
+} from "next";
 import Head from "next/head";
 import { ssgHelper } from "~/server/api/ssgHelper";
-import type { GetStaticPropsContext, InferGetStaticPropsType } from "next";
 import ErrorPage from "next/error";
 import Link from "next/link";
 import { api } from "~/utils/api";
@@ -45,7 +49,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       <Head>
         <title>{`SoccerHub - ${profile.name}`}</title>
       </Head>
-      <header className=" sticky top-0 z-10 flex items-center border-b bg-white px-4 py-2">
+      <header className=" sticky top-0 z-10 flex items-center border-b bg-white px-4 py-2 text-black">
         <Link href=".." className="mr-2">
           <IconHoverEffect>
             <VscArrowLeft className="h-6 w-6" />

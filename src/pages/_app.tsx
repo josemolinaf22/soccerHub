@@ -16,7 +16,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <div className="bg-gray-900">
       <SessionProvider session={session}>
         <Head>
-          <title>Soccer Hub</title>
+          <title>SoccerHub</title>
           <meta
             name="descritpion"
             content="Website to help you find who is playing in your area!"

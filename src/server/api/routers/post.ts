@@ -19,7 +19,6 @@ export const postRouter = createTRPCRouter({
       })
     )
     .query(async ({ input: { limit = 10, userId, cursor }, ctx }) => {
-
       return await getInfinitePosts({
         limit,
         ctx,
@@ -113,6 +112,7 @@ const getInfinitePosts = async ({
       },
     },
   });
+  console.log(cursor, "test 1");
 
   let nextCursor: typeof cursor | undefined;
   if (data.length > limit) {
